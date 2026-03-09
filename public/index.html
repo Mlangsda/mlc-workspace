@@ -168,6 +168,11 @@
     color: #3d8a56;
   }
 
+  /* Odd last card fills full width */
+  .apps-grid .app-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
   /* AI TEAM */
   .team-grid {
     display: grid;
@@ -261,6 +266,13 @@
       <div class="app-icon" style="background: rgba(74,142,196,0.12); color: var(--blue);">&#127760;</div>
       <h2>MLC Website</h2>
       <p>Marzena Langsdale Communications hemsida — tjänster, portfolio och kontakt.</p>
+      <span class="app-status status-live">Live</span>
+    </a>
+
+    <a class="app-card" href="https://mlc-salj-strategi.vercel.app" target="_blank">
+      <div class="app-icon" style="background: rgba(196,138,74,0.12); color: #c48a4a;">&#128200;</div>
+      <h2>Sälj & Marknadsstrategi</h2>
+      <p>Marknadschefens strategi med pitch-texter, paket, handlingsplan och mejlmallar.</p>
       <span class="app-status status-live">Live</span>
     </a>
 
