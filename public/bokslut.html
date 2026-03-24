@@ -451,7 +451,6 @@
       li.querySelector('.todo-checkbox').addEventListener('click', () => toggleTodo(todo.id, !todo.completed));
 
       const textInput = li.querySelector('.todo-text');
-      autoResize(textInput);
       let editTimer;
       textInput.addEventListener('input', () => {
         autoResize(textInput);
@@ -470,6 +469,8 @@
 
       todoList.appendChild(li);
     });
+    // Auto-resize all textareas after they are in the DOM
+    todoList.querySelectorAll('.todo-text').forEach(autoResize);
   }
 
   function escapeHtml(str) {
