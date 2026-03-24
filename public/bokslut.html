@@ -117,7 +117,7 @@
 
   .todo-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
     padding: 14px 16px;
     background: var(--card);
@@ -153,11 +153,13 @@
     flex-shrink: 0;
     user-select: none;
     line-height: 1;
+    margin-top: 2px;
   }
 
   .todo-checkbox {
     width: 22px;
     height: 22px;
+    min-height: 22px;
     border-radius: 6px;
     border: 2px solid var(--gold);
     background: #fff;
@@ -187,12 +189,16 @@
     flex: 1;
     font-size: 15px;
     color: var(--text);
-    line-height: 1.4;
+    line-height: 1.5;
     border: none;
     background: transparent;
     font-family: inherit;
     outline: none;
     width: 100%;
+    resize: none;
+    overflow: hidden;
+    padding: 0;
+    min-height: 22px;
   }
 
   .todo-text:focus {
@@ -421,6 +427,11 @@
     updateProgress();
   }
 
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+  }
+
   function renderTodos() {
     todoList.innerHTML = '';
     todos.forEach((todo, idx) => {
@@ -433,15 +444,17 @@
       li.innerHTML =
         '<span class="todo-drag">&#8942;&#8942;</span>' +
         '<div class="todo-checkbox' + (todo.completed ? ' checked' : '') + '"></div>' +
-        '<input class="todo-text" value="' + escapeHtml(todo.text) + '">' +
+        '<textarea class="todo-text" rows="1">' + escapeHtml(todo.text) + '</textarea>' +
         (todo.deadline ? '<span class="todo-deadline">' + escapeHtml(todo.deadline) + '</span>' : '') +
         '<button class="todo-delete" title="Ta bort">&times;</button>';
 
       li.querySelector('.todo-checkbox').addEventListener('click', () => toggleTodo(todo.id, !todo.completed));
 
       const textInput = li.querySelector('.todo-text');
+      autoResize(textInput);
       let editTimer;
       textInput.addEventListener('input', () => {
+        autoResize(textInput);
         clearTimeout(editTimer);
         editTimer = setTimeout(() => updateTodoText(todo.id, textInput.value), 800);
       });
