@@ -1,0 +1,11 @@
+{
+  "name": "mlc-workspace",
+  "version": "1.0.0",
+  "description": "MLC Workspace — central dashboard",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mlangsda/mlc-workspace.git"
+  },
+  "license": "ISC"
+}

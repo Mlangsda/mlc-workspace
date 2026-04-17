@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Systemstatus — MLC Workspace</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+<style>
+  :root {
+    --bg: #faf6f0;
+    --card: #ffffff;
+    --border: #e8dcc8;
+    --text: #3d3425;
+    --text-secondary: #7a6d5a;
+    --accent: #c49a4a;
+    --green: #3d8a56;
+    --green-bg: rgba(61,138,86,0.12);
+    --yellow: #c49a2a;
+    --yellow-bg: rgba(196,154,42,0.14);
+    --red: #c4544a;
+    --red-bg: rgba(196,84,74,0.12);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  header {
+    padding: 40px 20px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  header img { width: 40px; height: 40px; aspect-ratio: 1/1; object-fit: contain; }
+  header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .container { max-width: 900px; margin: 0 auto; padding: 20px 20px 80px; }
+  .summary {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 8px rgba(61,52,37,0.06);
+  }
+  .summary-headline {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .summary-sub { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+  .summary-counts { display: flex; gap: 16px; }
+  .count-pill {
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pill-ok { background: var(--green-bg); color: var(--green); }
+  .pill-warn { background: var(--yellow-bg); color: var(--yellow); }
+  .pill-fail { background: var(--red-bg); color: var(--red); }
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin: 32px 0 12px;
+  }
+  .status-list {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .status-row {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    gap: 14px;
+  }
+  .status-row:last-child { border-bottom: none; }
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-ok { background: var(--green); box-shadow: 0 0 0 4px var(--green-bg); }
+  .dot-warn { background: var(--yellow); box-shadow: 0 0 0 4px var(--yellow-bg); }
+  .dot-fail { background: var(--red); box-shadow: 0 0 0 4px var(--red-bg); animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .status-name { flex: 1; font-weight: 600; font-size: 14px; }
+  .status-detail { font-size: 13px; color: var(--text-secondary); }
+  .actions {
+    margin: 24px 0 0;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  button, .btn-link {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+    font-family: inherit;
+  }
+  button:hover, .btn-link:hover { background: #b38a3a; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--card); border-color: var(--accent); }
+  .timestamp { font-size: 12px; color: var(--text-secondary); margin-top: 12px; }
+  .loading, .error {
+    padding: 40px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+  .error { color: var(--red); }
+  footer {
+    text-align: center;
+    padding: 32px 20px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+  @media (max-width: 700px) {
+    header h1 { font-size: 22px; }
+    .summary { padding: 20px; }
+    .summary-headline { font-size: 18px; }
+    .status-row { padding: 12px 16px; gap: 10px; }
+    .status-detail { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="/mlc-logo.png" alt="MLC">
+  <h1>Systemstatus</h1>
+</header>
+
+<div class="container">
+
+  <div class="summary" id="summary">
+    <div>
+      <div class="summary-headline" id="headline">Kontrollerar system…</div>
+      <div class="summary-sub" id="subline">CIO:n läser av alla projekt, integrationer och 3:e part.</div>
+    </div>
+    <div class="summary-counts" id="counts"></div>
+  </div>
+
+  <div class="actions">
+    <button onclick="loadStatus()">Uppdatera</button>
+    <a href="/" class="btn-link btn-secondary">Tillbaka till Workspace</a>
+  </div>
+  <div class="timestamp" id="timestamp"></div>
+
+  <div class="section-title">MLC-projekt</div>
+  <div class="status-list" id="projects"><div class="loading">Laddar…</div></div>
+
+  <div class="section-title">Integrationer</div>
+  <div class="status-list" id="integrations"><div class="loading">Laddar…</div></div>
+
+  <div class="section-title">3:e parts status</div>
+  <div class="status-list" id="thirdparty"><div class="loading">Laddar…</div></div>
+
+</div>
+
+<footer>MLC Nest AB &mdash; Nordens mest empatiska och skalbara byrå</footer>
+
+<script>
+function renderList(containerId, items) {
+  const container = document.getElementById(containerId);
+  if (!items || items.length === 0) {
+    container.innerHTML = '<div class="loading">Ingen data</div>';
+    return;
+  }
+  container.innerHTML = items.map(item => {
+    const dotClass = item.status === 'OK' ? 'dot-ok' : item.status === 'WARN' ? 'dot-warn' : 'dot-fail';
+    const name = item.url
+      ? '<a href="' + item.url + '" target="_blank" style="color: inherit; text-decoration: none;">' + item.name + '</a>'
+      : item.name;
+    return '<div class="status-row">' +
+      '<div class="status-dot ' + dotClass + '"></div>' +
+      '<div class="status-name">' + name + '</div>' +
+      '<div class="status-detail">' + item.detail + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+async function loadStatus() {
+  document.getElementById('headline').textContent = 'Kontrollerar system…';
+  document.getElementById('counts').innerHTML = '';
+  try {
+    const res = await fetch('/api/health', { cache: 'no-store' });
+    if (!res.ok) throw new Error('API returnerade ' + res.status);
+    const data = await res.json();
+    const { summary, projects, integrations, thirdParty, timestamp } = data;
+
+    let headline, subline;
+    if (summary.fail === 0 && summary.warn === 0) {
+      headline = '✅ Allt grönt';
+      subline = 'Alla system svarar normalt.';
+    } else if (summary.fail === 0) {
+      headline = '⚠️ ' + summary.warn + ' varning' + (summary.warn === 1 ? '' : 'ar');
+      subline = 'Inget är nere — men något kör långsamt eller är degraderat.';
+    } else {
+      headline = '🚨 ' + summary.fail + ' kritiskt fel';
+      subline = 'CIO:n rekommenderar att du tittar på detta nu.';
+    }
+    document.getElementById('headline').textContent = headline;
+    document.getElementById('subline').textContent = subline;
+
+    document.getElementById('counts').innerHTML =
+      '<div class="count-pill pill-ok">' + summary.ok + ' OK</div>' +
+      (summary.warn > 0 ? '<div class="count-pill pill-warn">' + summary.warn + ' varn.</div>' : '') +
+      (summary.fail > 0 ? '<div class="count-pill pill-fail">' + summary.fail + ' fel</div>' : '');
+
+    renderList('projects', projects);
+    renderList('integrations', integrations);
+    renderList('thirdparty', thirdParty);
+
+    document.getElementById('timestamp').textContent = 'Senast uppdaterad: ' + new Date(timestamp).toLocaleString('sv-SE');
+  } catch (err) {
+    document.getElementById('headline').textContent = 'Kunde inte läsa status';
+    document.getElementById('subline').textContent = err.message;
+    document.getElementById('projects').innerHTML = '<div class="error">Fel vid anrop till /api/health</div>';
+    document.getElementById('integrations').innerHTML = '';
+    document.getElementById('thirdparty').innerHTML = '';
+  }
+}
+
+loadStatus();
+setInterval(loadStatus, 60000);
+</script>
+
+</body>
+</html>
