@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Webbinspiration — MLC Workspace</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+<style>
+  :root {
+    --bg: #fdf7fb;
+    --card: #ffffff;
+    --border: #f0d4e4;
+    --border-light: #f7e4ee;
+    --text: #3d2535;
+    --text-secondary: #7a5a6a;
+    --accent: #c42a84;
+    --accent-light: rgba(196,42,132,0.12);
+    --accent-hover: #a8216e;
+    --accent-bg: #fff5fa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(180deg, #f5c8e0 0%, #f8d8e8 30%, #fdf4f8 60%, #fffafc 100%);
+    min-height: 100vh;
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+
+  header img {
+    width: 48px;
+    height: 48px;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+  }
+
+  header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .header-back {
+    text-decoration: none;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: auto;
+    transition: color 0.15s;
+  }
+
+  .header-back:hover { color: var(--accent-hover); }
+
+  .subtitle {
+    color: var(--text-secondary);
+    font-size: 15px;
+    margin-top: -28px;
+    margin-bottom: 40px;
+    padding-left: 62px;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    padding-left: 4px;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+
+  .site-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 20px;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(196,42,132,0.04);
+    position: relative;
+  }
+
+  .site-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(196,42,132,0.12);
+  }
+
+  .site-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .site-card h3::after {
+    content: "↗";
+    font-size: 13px;
+    color: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s;
+    margin-left: auto;
+  }
+
+  .site-card:hover h3::after { opacity: 1; }
+
+  .site-card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+  }
+
+  .site-card .url {
+    font-size: 12px;
+    color: var(--accent);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    margin-top: 4px;
+  }
+
+  .starred {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+  }
+
+  .starred h3::before {
+    content: "★";
+    color: var(--accent);
+    font-size: 14px;
+  }
+
+  .intro {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 40px;
+    font-size: 15px;
+    color: var(--text-secondary);
+  }
+
+  .intro strong {
+    color: var(--text);
+  }
+
+  footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 700px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 24px; }
+    .subtitle { padding-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <img src="/mlc-logo.png" alt="MLC">
+    <h1>Webbinspiration</h1>
+    <a class="header-back" href="/">← Tillbaka</a>
+  </header>
+  <div class="subtitle">ADns bokmärken — snygga hemsidor att hämta grepp från</div>
+
+  <div class="intro">
+    <strong>Hur du använder listan:</strong> klicka på ett kort för att öppna sajten i ny flik. Stjärnmarkerade (★) är dina egna favoriter från Chrome-bokmärkena. Resten är kurerade tillägg från ADn. Hittar du nya — säg till, så lägger vi till dem.
+  </div>
+
+  <div class="section">
+    <div class="section-title">Marzenas egna favoriter</div>
+    <div class="cards-grid">
+
+      <a class="site-card starred" href="https://www.awwwards.com" target="_blank" rel="noopener">
+        <h3>Awwwards</h3>
+        <p>Branschstandard för webbdesignpriser. De snyggaste sajterna i världen, dagligt uppdaterat.</p>
+        <span class="url">awwwards.com</span>
+      </a>
+
+      <a class="site-card starred" href="https://www.siteinspire.com" target="_blank" rel="noopener">
+        <h3>SiteInspire</h3>
+        <p>Kurerat galleri — filtrera på stil, bransch och typ. Bra för konkreta referenser.</p>
+        <span class="url">siteinspire.com</span>
+      </a>
+
+      <a class="site-card starred" href="http://www.fhoke.com" target="_blank" rel="noopener">
+        <h3>fhoke.com</h3>
+        <p>Din egen markering: "BRA HEMSIDA". En byrås minimalistiska portfolio.</p>
+        <span class="url">fhoke.com</span>
+      </a>
+
+      <a class="site-card starred" href="https://www.thecoolhunter.net/design" target="_blank" rel="noopener">
+        <h3>The Cool Hunter</h3>
+        <p>Design, arkitektur, mode, lifestyle. Bred trendinspiration.</p>
+        <span class="url">thecoolhunter.net</span>
+      </a>
+
+      <a class="site-card starred" href="https://theinspirationroom.com/daily/" target="_blank" rel="noopener">
+        <h3>The Inspiration Room</h3>
+        <p>Reklam och kreativitet från hela världen — kampanjer, print, film.</p>
+        <span class="url">theinspirationroom.com</span>
+      </a>
+
+      <a class="site-card starred" href="http://www.logospire.com" target="_blank" rel="noopener">
+        <h3>Logospire</h3>
+        <p>Logoinspiration — tusentals logotyper sorterade efter stil.</p>
+        <span class="url">logospire.com</span>
+      </a>
+
+      <a class="site-card starred" href="https://www.adsoftheworld.com" target="_blank" rel="noopener">
+        <h3>Ads of the World</h3>
+        <p>Global reklamarkiv. Bra för kampanjidéer och konkurrensbevakning.</p>
+        <span class="url">adsoftheworld.com</span>
+      </a>
+
+      <a class="site-card starred" href="http://logopond.com" target="_blank" rel="noopener">
+        <h3>Logopond</h3>
+        <p>Community för logodesigners. Kompletterar Logospire.</p>
+        <span class="url">logopond.com</span>
+      </a>
+
+      <a class="site-card starred" href="https://www.happycentro.it" target="_blank" rel="noopener">
+        <h3>Happycentro</h3>
+        <p>Italiensk designbyrå med fantastisk visuell lekfullhet. Värd ett eget besök.</p>
+        <span class="url">happycentro.it</span>
+      </a>
+
+      <a class="site-card starred" href="https://www.gestalten.com" target="_blank" rel="noopener">
+        <h3>Gestalten</h3>
+        <p>Designböcker, trender och kurerat innehåll från tyska förlaget.</p>
+        <span class="url">gestalten.com</span>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Moderna webbgallerier</div>
+    <div class="cards-grid">
+
+      <a class="site-card" href="https://godly.website" target="_blank" rel="noopener">
+        <h3>Godly</h3>
+        <p>De mest trendiga sajterna just nu. Perfekt för dagens tonalitet.</p>
+        <span class="url">godly.website</span>
+      </a>
+
+      <a class="site-card" href="https://land-book.com" target="_blank" rel="noopener">
+        <h3>Land-book</h3>
+        <p>Landing pages — filterbart på bransch, stil, färg. Säljsida-inspiration.</p>
+        <span class="url">land-book.com</span>
+      </a>
+
+      <a class="site-card" href="https://httpster.net" target="_blank" rel="noopener">
+        <h3>Httpster</h3>
+        <p>Dagligt kurerad designfeed. Kort, snabbt, inspirerande.</p>
+        <span class="url">httpster.net</span>
+      </a>
+
+      <a class="site-card" href="https://www.lapa.ninja" target="_blank" rel="noopener">
+        <h3>Lapa Ninja</h3>
+        <p>Landing pages + gratis UI-kits. Kategoriserat på bransch.</p>
+        <span class="url">lapa.ninja</span>
+      </a>
+
+      <a class="site-card" href="https://onepagelove.com" target="_blank" rel="noopener">
+        <h3>One Page Love</h3>
+        <p>One-pagers och korta sajter — bra för kampanjsidor.</p>
+        <span class="url">onepagelove.com</span>
+      </a>
+
+      <a class="site-card" href="https://minimal.gallery" target="_blank" rel="noopener">
+        <h3>Minimal Gallery</h3>
+        <p>Minimalistisk webbdesign. Rent, tyst, typografidrivet.</p>
+        <span class="url">minimal.gallery</span>
+      </a>
+
+      <a class="site-card" href="https://bestwebsite.gallery" target="_blank" rel="noopener">
+        <h3>Best Website Gallery</h3>
+        <p>Klassisk galleri — kurerat, bred mix av stilar.</p>
+        <span class="url">bestwebsite.gallery</span>
+      </a>
+
+      <a class="site-card" href="https://www.typewolf.com" target="_blank" rel="noopener">
+        <h3>Typewolf</h3>
+        <p>Typografi på webben — vilka fonter som används och hur.</p>
+        <span class="url">typewolf.com</span>
+      </a>
+
+      <a class="site-card" href="https://saaslandingpage.com" target="_blank" rel="noopener">
+        <h3>SaaS Landing Page</h3>
+        <p>B2B- och SaaS-patterns. Bra för Yobedoo-liknande sajter.</p>
+        <span class="url">saaslandingpage.com</span>
+      </a>
+
+      <a class="site-card" href="https://klart.co" target="_blank" rel="noopener">
+        <h3>Klart.co</h3>
+        <p>Dagligt designbrev via mejl. Snabb inspiration i inkorgen.</p>
+        <span class="url">klart.co</span>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Portfolios & designcommunities</div>
+    <div class="cards-grid">
+
+      <a class="site-card" href="https://dribbble.com" target="_blank" rel="noopener">
+        <h3>Dribbble</h3>
+        <p>Designers visar UI, illustrationer, portfolios. Stor community.</p>
+        <span class="url">dribbble.com</span>
+      </a>
+
+      <a class="site-card" href="https://www.behance.net" target="_blank" rel="noopener">
+        <h3>Behance</h3>
+        <p>Adobes creative community. Längre case studies, fullständiga projekt.</p>
+        <span class="url">behance.net</span>
+      </a>
+
+      <a class="site-card" href="https://www.bestfolios.com" target="_blank" rel="noopener">
+        <h3>Bestfolios</h3>
+        <p>Designerportfolios kurerade. Bra för personliga sajt-referenser.</p>
+        <span class="url">bestfolios.com</span>
+      </a>
+
+      <a class="site-card" href="https://savee.it" target="_blank" rel="noopener">
+        <h3>Savee</h3>
+        <p>Visuell moodboard — bilder, typografi, färg. Mer visuellt än Pinterest.</p>
+        <span class="url">savee.it</span>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">UI/UX-referenser (appar & flöden)</div>
+    <div class="cards-grid">
+
+      <a class="site-card" href="https://mobbin.com" target="_blank" rel="noopener">
+        <h3>Mobbin</h3>
+        <p>App-screenshots och UI-patterns. Referensverktyg för appdesign.</p>
+        <span class="url">mobbin.com</span>
+      </a>
+
+      <a class="site-card" href="https://pageflows.com" target="_blank" rel="noopener">
+        <h3>Page Flows</h3>
+        <p>Onboarding, checkout och hela användarflöden i video.</p>
+        <span class="url">pageflows.com</span>
+      </a>
+
+      <a class="site-card" href="https://refero.design" target="_blank" rel="noopener">
+        <h3>Refero</h3>
+        <p>Konkreta UI-komponenter i riktigt sammanhang.</p>
+        <span class="url">refero.design</span>
+      </a>
+
+    </div>
+  </div>
+
+  <footer>
+    MLC Nest AB — Nordens mest empatiska och skalbara byrå
+  </footer>
+
+</div>
+</body>
+</html>
