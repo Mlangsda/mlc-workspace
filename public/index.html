@@ -289,11 +289,11 @@
       <span class="app-status status-live">Live</span>
     </a>
 
-    <a class="app-card" href="/systemstatus.html">
+    <a class="app-card" id="systemstatus-card" href="/systemstatus.html">
       <div class="app-icon" style="background: rgba(61,138,86,0.12); color: #3d8a56;">&#128737;&#65039;</div>
       <h2>Systemstatus</h2>
-      <p>CIO:ns övervakning — hälsa för alla projekt, integrationer och 3:e part. Live-koll med ett klick.</p>
-      <span class="app-status status-live">Live</span>
+      <p id="systemstatus-desc">CIO:ns övervakning — hälsa för alla projekt, integrationer och 3:e part. Live-koll med ett klick.</p>
+      <span class="app-status status-live" id="systemstatus-badge">Live</span>
     </a>
 
     <a class="app-card" href="/webbinspiration.html">
@@ -369,6 +369,36 @@
 <footer>
   MLC Nest AB &mdash; Nordens mest empatiska och skalbara byrå
 </footer>
+
+<script>
+// Färgsätt Systemstatus-boxen rött om security-watch har fynd
+(async function() {
+  try {
+    const res = await fetch('/api/health', { cache: 'no-store' });
+    if (!res.ok) return;
+    const data = await res.json();
+    const card = document.getElementById('systemstatus-card');
+    const desc = document.getElementById('systemstatus-desc');
+    const badge = document.getElementById('systemstatus-badge');
+    if (!card) return;
+    const hasSecurityIssue = data.security && data.security.status === 'FAIL';
+    const hasSystemIssue = (data.summary?.fail || 0) > 0;
+    if (hasSecurityIssue || hasSystemIssue) {
+      card.style.background = '#fbe9e7';
+      card.style.border = '1px solid #f5b7b1';
+      const n = (data.security?.findings?.length || 0) + (data.summary?.fail || 0);
+      badge.textContent = n + ' varning' + (n === 1 ? '' : 'ar');
+      badge.style.background = '#fbe9e7';
+      badge.style.color = '#c0392b';
+      if (hasSecurityIssue) {
+        desc.innerHTML = '<strong style="color:#c0392b;">🚨 Säkerhetsvarningar kräver action</strong> — klicka för detaljer och fix.';
+      } else {
+        desc.innerHTML = '<strong style="color:#c0392b;">🚨 Kritiska fel</strong> — klicka för detaljer.';
+      }
+    }
+  } catch {}
+})();
+</script>
 
 </body>
 </html>
