@@ -190,6 +190,9 @@
   <div class="section-title">MLC-projekt</div>
   <div class="status-list" id="projects"><div class="loading">Laddar…</div></div>
 
+  <div class="section-title">Privata projekt</div>
+  <div class="status-list" id="privateProjects"><div class="loading">Laddar…</div></div>
+
   <div class="section-title">Integrationer</div>
   <div class="status-list" id="integrations"><div class="loading">Laddar…</div></div>
 
@@ -315,7 +318,7 @@ async function loadStatus() {
     const res = await fetch('/api/health', { cache: 'no-store' });
     if (!res.ok) throw new Error('API returnerade ' + res.status);
     const data = await res.json();
-    const { summary, projects, integrations, thirdParty, timestamp, security } = data;
+    const { summary, projects, privateProjects, integrations, thirdParty, timestamp, security } = data;
     renderSecurity(security);
 
     const secFindings = (security?.findings?.length) || 0;
@@ -344,6 +347,7 @@ async function loadStatus() {
       (totalFail > 0 ? '<div class="count-pill pill-fail">' + totalFail + ' fel</div>' : '');
 
     renderList('projects', projects);
+    renderList('privateProjects', privateProjects);
     renderList('integrations', integrations);
     renderList('thirdparty', thirdParty);
 

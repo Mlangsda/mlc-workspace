@@ -7,6 +7,9 @@ const MLC_PROJECTS = [
   { name: 'Inkorgsrapport', url: 'https://inkorgsrapport.vercel.app' },
   { name: 'MLC Website', url: 'https://mlc-website-xi.vercel.app' },
   { name: 'Sälj & Marknadsstrategi', url: 'https://mlc-salj-strategi.vercel.app' },
+];
+
+const PRIVATE_PROJECTS = [
   { name: 'Privat Dashboard', url: 'https://privat-dashboard.vercel.app' },
   { name: 'SIP-möte', url: 'https://sip-meeting.vercel.app' },
   { name: 'Privat Checklista', url: 'https://privat-checklista.vercel.app' },
@@ -133,8 +136,9 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=30');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const [projects, thirdParty, supabase, msGraph, hf, security] = await Promise.all([
+  const [projects, privateProjects, thirdParty, supabase, msGraph, hf, security] = await Promise.all([
     Promise.all(MLC_PROJECTS.map(checkProject)),
+    Promise.all(PRIVATE_PROJECTS.map(checkProject)),
     Promise.all(THIRD_PARTY.map(checkThirdParty)),
     checkSupabase(),
     checkMsGraph(),
@@ -143,14 +147,14 @@ export default async function handler(req, res) {
   ]);
 
   const integrations = [supabase, msGraph, hf];
-  const all = [...projects, ...thirdParty, ...integrations];
+  const all = [...projects, ...privateProjects, ...thirdParty, ...integrations];
   const fails = all.filter(r => r.status === 'FAIL').length;
   const warns = all.filter(r => r.status === 'WARN').length;
 
   res.status(200).json({
     timestamp: new Date().toISOString(),
     summary: { ok: all.length - fails - warns, warn: warns, fail: fails, total: all.length },
-    projects, thirdParty, integrations,
+    projects, privateProjects, thirdParty, integrations,
     security,
   });
 }
