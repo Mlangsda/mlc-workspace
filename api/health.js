@@ -88,6 +88,28 @@ async function checkMsGraph() {
   }
 }
 
+async function checkSecurity() {
+  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+  const key = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  try {
+    const res = await fetchWithTimeout(`${url}/rest/v1/security_findings?select=created_at,findings,action_required&order=created_at.desc&limit=1`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+    });
+    if (!res.ok) return null;
+    const rows = await res.json();
+    if (!rows || rows.length === 0) return { status: 'UNKNOWN', findings: [], lastRun: null };
+    const row = rows[0];
+    return {
+      status: row.action_required ? 'FAIL' : 'OK',
+      findings: row.findings || [],
+      lastRun: row.created_at,
+    };
+  } catch {
+    return null;
+  }
+}
+
 async function checkHuggingFace() {
   const key = process.env.HF_API_KEY;
   if (!key) return { name: 'Hugging Face', status: 'WARN', detail: 'Env-var saknas' };
@@ -106,12 +128,13 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=30');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const [projects, thirdParty, supabase, msGraph, hf] = await Promise.all([
+  const [projects, thirdParty, supabase, msGraph, hf, security] = await Promise.all([
     Promise.all(MLC_PROJECTS.map(checkProject)),
     Promise.all(THIRD_PARTY.map(checkThirdParty)),
     checkSupabase(),
     checkMsGraph(),
     checkHuggingFace(),
+    checkSecurity(),
   ]);
 
   const integrations = [supabase, msGraph, hf];
@@ -123,5 +146,6 @@ export default async function handler(req, res) {
     timestamp: new Date().toISOString(),
     summary: { ok: all.length - fails - warns, warn: warns, fail: fails, total: all.length },
     projects, thirdParty, integrations,
+    security,
   });
 }
