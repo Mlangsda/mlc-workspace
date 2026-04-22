@@ -7,6 +7,11 @@ const MLC_PROJECTS = [
   { name: 'Inkorgsrapport', url: 'https://inkorgsrapport.vercel.app' },
   { name: 'MLC Website', url: 'https://mlc-website-xi.vercel.app' },
   { name: 'Sälj & Marknadsstrategi', url: 'https://mlc-salj-strategi.vercel.app' },
+  { name: 'Privat Dashboard', url: 'https://privat-dashboard.vercel.app' },
+  { name: 'SIP-möte', url: 'https://sip-meeting.vercel.app' },
+  { name: 'Privat Checklista', url: 'https://privat-checklista.vercel.app' },
+  { name: 'Adeocare Todo', url: 'https://adeocare-todo.vercel.app' },
+  { name: 'Yobedoo Tavla', url: 'https://yobedoo-tavla.vercel.app' },
 ];
 
 const THIRD_PARTY = [
