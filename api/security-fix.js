@@ -39,20 +39,28 @@ async function markEnvVarSensitive(projectId, envId) {
   return { ok: true, message: `${projectId}: env-variabel markerad Sensitive` };
 }
 
-async function updateFindingFixed(findingId, fixResult) {
+async function removeFindingFromLatest(code, contextJson) {
   const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key || !findingId) return;
+  const key = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+  if (!url || !key) return;
   try {
-    await fetch(`${url}/rest/v1/security_findings?id=eq.${findingId}`, {
+    const latest = await fetch(`${url}/rest/v1/security_findings?select=*&order=created_at.desc&limit=1`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+    });
+    if (!latest.ok) return;
+    const rows = await latest.json();
+    if (!rows.length) return;
+    const row = rows[0];
+    const ctxStr = JSON.stringify(contextJson || {});
+    const newFindings = (row.findings || []).filter(f => !(f.code === code && JSON.stringify(f.context || {}) === ctxStr));
+    const stillAction = newFindings.some(f => f.fixType === 'manual' || f.fixType === 'auto');
+    await fetch(`${url}/rest/v1/security_findings?id=eq.${row.id}`, {
       method: 'PATCH',
       headers: {
-        apikey: key,
-        Authorization: `Bearer ${key}`,
-        'Content-Type': 'application/json',
-        Prefer: 'return=minimal',
+        apikey: key, Authorization: `Bearer ${key}`,
+        'Content-Type': 'application/json', Prefer: 'return=minimal',
       },
-      body: JSON.stringify({ action_required: false }),
+      body: JSON.stringify({ findings: newFindings, action_required: stillAction }),
     });
   } catch {
     // ignore
@@ -85,7 +93,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ ok: false, error: `Okänd code: ${code}` });
     }
 
-    if (result.ok) await updateFindingFixed(findingId, result);
+    if (result.ok) await removeFindingFromLatest(code, context);
     return res.status(result.ok ? 200 : 500).json(result);
   } catch (err) {
     return res.status(500).json({ ok: false, error: err.message });

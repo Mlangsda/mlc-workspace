@@ -246,9 +246,9 @@ function showManualInstructions(finding) {
   const cmd = 'kolla security-watch-fynd: ' + finding.code + ' (' + JSON.stringify(finding.context || {}) + ')';
   body.innerHTML =
     '<h3 style="margin:0 0 12px;">' + (finding.icon || '⚠️') + ' ' + escapeHtml(finding.title || finding.code) + '</h3>' +
-    '<pre style="white-space:pre-wrap;font-family:-apple-system,sans-serif;font-size:14px;background:#f8f8f8;padding:12px;border-radius:8px;">' + escapeHtml(instr) + '</pre>' +
+    '<pre style="white-space:pre-wrap;word-break:break-word;font-family:-apple-system,sans-serif;font-size:14px;background:#f8f8f8;padding:12px;border-radius:8px;">' + escapeHtml(instr) + '</pre>' +
     '<div style="margin-top:16px;">Eller klistra in följande i Claude Code:</div>' +
-    '<pre style="background:#2d2d2d;color:#e8e8e8;padding:12px;border-radius:8px;margin-top:8px;font-size:13px;">' + escapeHtml(cmd) + '</pre>' +
+    '<pre style="background:#2d2d2d;color:#e8e8e8;padding:12px;border-radius:8px;margin-top:8px;font-size:13px;white-space:pre-wrap;word-break:break-all;overflow-wrap:anywhere;">' + escapeHtml(cmd) + '</pre>' +
     '<div style="display:flex;gap:10px;margin-top:16px;">' +
       '<button onclick="navigator.clipboard.writeText(' + JSON.stringify(cmd) + ');this.textContent=\'✅ Kopierat\';" style="background:#2c3e50;color:#fff;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;">📋 Kopiera kommando</button>' +
       '<button onclick="document.getElementById(\'manual-modal\').style.display=\'none\'" style="background:#ecf0f1;border:1px solid #bdc3c7;padding:10px 18px;border-radius:8px;cursor:pointer;">Stäng</button>' +
@@ -318,15 +318,21 @@ async function loadStatus() {
     const { summary, projects, integrations, thirdParty, timestamp, security } = data;
     renderSecurity(security);
 
+    const secFindings = (security?.findings?.length) || 0;
+    const secFail = security?.status === 'FAIL' ? secFindings : 0;
+    const totalFail = (summary.fail || 0) + secFail;
     let headline, subline;
-    if (summary.fail === 0 && summary.warn === 0) {
+    if (totalFail === 0 && summary.warn === 0) {
       headline = '✅ Allt grönt';
       subline = 'Alla system svarar normalt.';
-    } else if (summary.fail === 0) {
+    } else if (totalFail === 0) {
       headline = '⚠️ ' + summary.warn + ' varning' + (summary.warn === 1 ? '' : 'ar');
       subline = 'Inget är nere — men något kör långsamt eller är degraderat.';
+    } else if (secFail > 0 && summary.fail === 0) {
+      headline = '🚨 ' + secFail + ' säkerhetsvarning' + (secFail === 1 ? '' : 'ar');
+      subline = 'Scrolla ner för detaljer och åtgärda.';
     } else {
-      headline = '🚨 ' + summary.fail + ' kritiskt fel';
+      headline = '🚨 ' + totalFail + ' kritiskt fel';
       subline = 'CIO:n rekommenderar att du tittar på detta nu.';
     }
     document.getElementById('headline').textContent = headline;
@@ -335,7 +341,7 @@ async function loadStatus() {
     document.getElementById('counts').innerHTML =
       '<div class="count-pill pill-ok">' + summary.ok + ' OK</div>' +
       (summary.warn > 0 ? '<div class="count-pill pill-warn">' + summary.warn + ' varn.</div>' : '') +
-      (summary.fail > 0 ? '<div class="count-pill pill-fail">' + summary.fail + ' fel</div>' : '');
+      (totalFail > 0 ? '<div class="count-pill pill-fail">' + totalFail + ' fel</div>' : '');
 
     renderList('projects', projects);
     renderList('integrations', integrations);
