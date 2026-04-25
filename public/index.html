@@ -33,6 +33,23 @@
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* FULL-PAGE BACKGROUND IMAGE (parallax) */
+  .page-bg {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    will-change: transform;
+  }
+
+  .page-wrapper {
+    position: relative;
+    z-index: 1;
   }
 
   /* HERO */
@@ -45,16 +62,6 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 25%, #fcd98c 50%, #f5d0a9 75%, #f0e6d0 100%);
-  }
-
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
   }
 
   .hero-content {
@@ -118,15 +125,17 @@
   }
 
   .app-card {
-    background: var(--card);
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 32px 24px;
     text-align: center;
     text-decoration: none;
     color: var(--text);
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(61,52,37,0.06);
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 12px rgba(61,52,37,0.06);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -135,8 +144,9 @@
 
   .app-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(61,52,37,0.12);
+    box-shadow: 0 8px 28px rgba(61,52,37,0.12);
     border-color: var(--accent);
+    background: rgba(255,255,255,0.88);
   }
 
   .app-icon {
@@ -193,11 +203,13 @@
   }
 
   .team-card {
-    background: var(--card);
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 18px 16px;
-    box-shadow: 0 1px 4px rgba(61,52,37,0.04);
+    box-shadow: 0 1px 6px rgba(61,52,37,0.04);
   }
 
   .team-card h3 {
@@ -221,10 +233,15 @@
 
   /* FOOTER */
   footer {
+    position: relative;
+    z-index: 1;
     text-align: center;
     padding: 32px 20px;
     color: var(--text-secondary);
     font-size: 13px;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-top: 1px solid var(--border);
   }
 
@@ -245,8 +262,11 @@
 </head>
 <body>
 
+<img class="page-bg" id="pageBg" src="/hero.png" alt="" onerror="this.style.display='none'">
+
+<div class="page-wrapper">
+
 <div class="hero">
-  <img class="hero-bg" src="/hero.png" alt="" onerror="this.style.display='none'">
   <div class="hero-content">
     <img class="hero-logo" src="/mlc-logo.png" alt="MLC">
     <h1>MLC Workspace</h1>
@@ -390,9 +410,22 @@
 
 </div>
 
+</div>
+
 <footer>
   MLC Nest AB &mdash; Nordens mest empatiska och skalbara byrå
 </footer>
+
+<script>
+// Parallax effect on background image
+const pageBg = document.getElementById('pageBg');
+if (pageBg) {
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    pageBg.style.transform = `translateY(${scrollY * 0.3}px) scale(1.1)`;
+  }, { passive: true });
+}
+</script>
 
 <script>
 // Färgsätt Systemstatus-boxen rött om security-watch har fynd
