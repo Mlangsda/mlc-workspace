@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MLC Workspace</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #faf6f0;
@@ -72,9 +75,10 @@
   }
 
   .hero h1 {
-    font-size: 48px;
-    font-weight: 800;
-    letter-spacing: -1.5px;
+    font-family: 'Italiana', serif;
+    font-size: 64px;
+    font-weight: 400;
+    letter-spacing: 1px;
     color: var(--text);
     text-align: center;
     text-shadow: 0 1px 2px rgba(255,255,255,0.6);
@@ -143,9 +147,10 @@
   }
 
   .app-card h2 {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
+    font-family: 'Italiana', serif;
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
   }
 
   .app-card p {
@@ -193,8 +198,10 @@
   }
 
   .team-card h3 {
-    font-size: 14px;
-    font-weight: 700;
+    font-family: 'Italiana', serif;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
     margin-bottom: 4px;
   }
 
@@ -220,7 +227,9 @@
 
   /* RESPONSIVE */
   @media (max-width: 700px) {
-    .hero h1 { font-size: 32px; }
+    .hero h1 { font-size: 44px; letter-spacing: 0.5px; }
+    .app-card h2 { font-size: 22px; }
+    .team-card h3 { font-size: 16px; }
     .hero { min-height: 280px; }
     .hero-logo { width: 56px; height: 56px; }
     .apps-grid { grid-template-columns: 1fr; }
