@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Typsnittsförslag — MLC Workspace</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Serif+Display&family=Italiana&family=Fraunces:wght@300;400;500;600;700&family=Bodoni+Moda:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #fdf7fb;
+    --card: #ffffff;
+    --border: #f0d4e4;
+    --border-light: #f7e4ee;
+    --text: #3d2535;
+    --text-secondary: #7a5a6a;
+    --accent: #c42a84;
+    --accent-light: rgba(196,42,132,0.12);
+    --accent-hover: #a8216e;
+    --accent-bg: #fff5fa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(180deg, #f5c8e0 0%, #f8d8e8 30%, #fdf4f8 60%, #fffafc 100%);
+    min-height: 100vh;
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  header img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+  }
+
+  header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .header-back {
+    text-decoration: none;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: auto;
+  }
+  .header-back:hover { color: var(--accent-hover); }
+
+  .lead {
+    color: var(--text-secondary);
+    font-size: 16px;
+    margin-bottom: 32px;
+    max-width: 720px;
+  }
+
+  .lead strong { color: var(--text); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(196,42,132,0.04);
+    transition: all 0.2s;
+  }
+
+  .card:hover {
+    border-color: var(--accent-light);
+    box-shadow: 0 4px 16px rgba(196,42,132,0.08);
+  }
+
+  .meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-light);
+    flex-wrap: wrap;
+  }
+
+  .meta .name {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+  }
+
+  .meta .desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: right;
+  }
+
+  .display {
+    font-size: 64px;
+    line-height: 1.05;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .display-small {
+    font-size: 36px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .body-text {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 640px;
+  }
+
+  .alpha {
+    font-size: 28px;
+    letter-spacing: 2px;
+    margin-top: 16px;
+    color: var(--text-secondary);
+    word-spacing: 4px;
+  }
+
+  /* Typsnitt-klasser */
+  .f-playfair  { font-family: 'Playfair Display', serif; }
+  .f-cormorant { font-family: 'Cormorant Garamond', serif; }
+  .f-dmserif   { font-family: 'DM Serif Display', serif; }
+  .f-italiana  { font-family: 'Italiana', serif; }
+  .f-fraunces  { font-family: 'Fraunces', serif; }
+  .f-bodoni    { font-family: 'Bodoni Moda', serif; }
+  .f-inter     { font-family: 'Inter', sans-serif; }
+  .f-dmsans    { font-family: 'DM Sans', sans-serif; }
+
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 48px 0 16px;
+    letter-spacing: -0.3px;
+  }
+
+  .section-title:first-of-type { margin-top: 24px; }
+
+  .pair-note {
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: var(--accent-bg);
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-top: 16px;
+    border-left: 3px solid var(--accent);
+  }
+
+  .closeness {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    margin-left: 8px;
+    text-transform: uppercase;
+  }
+  .c-glacior { background: #fce4d4; color: #b8540f; }
+  .c-stylish { background: #f4d4e4; color: #a8216e; }
+  .c-both    { background: #e0d4f4; color: #6e3fa8; }
+
+  @media (max-width: 700px) {
+    .display { font-size: 44px; }
+    .display-small { font-size: 28px; }
+    .alpha { font-size: 20px; letter-spacing: 1.5px; }
+    .card { padding: 24px 20px; }
+    header h1 { font-size: 24px; }
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-light);
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <img src="/mlc-logo.png" alt="MLC">
+    <h1>Typsnittsförslag</h1>
+    <a href="/" class="header-back">← Tillbaka</a>
+  </header>
+
+  <p class="lead">
+    Sex gratis Google Fonts-serifer som ligger nära <strong>GLACIOR</strong> och <strong>Stylish Mother</strong>. Alla går att använda direkt på alla MLC-dashboards utan licens. Längst ner: två sans-serif-förslag för brödtext/UI som passar att kombinera med rubrikserifen.
+  </p>
+
+  <h2 class="section-title">Display-serifer (för rubriker)</h2>
+
+  <!-- Cormorant Garamond -->
+  <div class="card">
+    <div class="meta">
+      <span class="name">Cormorant Garamond <span class="closeness c-glacior">Närmast GLACIOR</span></span>
+      <span class="desc">Hög, smal, elegant.<br>Mycket "fashion-magasin".</span>
+    </div>
+    <div class="display f-cormorant" style="font-weight:500;">MLC Workspace</div>
+    <div class="display-small f-cormorant" style="font-weight:300; letter-spacing:8px;">G L A C I O R</div>
+    <div class="alpha f-cormorant">ABCDEFGHIJKLMNOPQRSTUVWXYZ åäö 1234567890</div>
+  </div>
+
+  <!-- Playfair Display -->
+  <div class="card">
+    <div class="meta">
+      <span class="name">Playfair Display <span class="closeness c-both">Mest mångsidig</span></span>
+      <span class="desc">Klassisk fashion-serif.<br>Tydlig kontrast tunn/tjock.</span>
+    </div>
+    <div class="display f-playfair" style="font-weight:600;">MLC Workspace</div>
+    <div class="display-small f-playfair" style="font-style: italic; font-weight:500;">Stylish Mother</div>
+    <div class="alpha f-playfair">ABCDEFGHIJKLMNOPQRSTUVWXYZ åäö 1234567890</div>
+  </div>
+
+  <!-- DM Serif Display -->
+  <div class="card">
+    <div class="meta">
+      <span class="name">DM Serif Display</span>
+      <span class="desc">Modern display-serif.<br>Lite mer karaktär och vikt.</span>
+    </div>
+    <div class="display f-dmserif">MLC Workspace</div>
+    <div class="display-small f-dmserif" style="font-style: italic;">Stylish Mother</div>
+    <div class="alpha f-dmserif">ABCDEFGHIJKLMNOPQRSTUVWXYZ åäö 1234567890</div>
+  </div>
+
+  <!-- Italiana -->
+  <div class="card">
+    <div class="meta">
+      <span class="name">Italiana <span class="closeness c-glacior">Superhög</span></span>
+      <span class="desc">Mycket smal och hög.<br>Dramatisk, runway-känsla.</span>
+    </div>
+    <div class="display f-italiana">MLC Workspace</div>
+    <div class="display-small f-italiana" style="letter-spacing:8px;">G L A C I O R</div>
+    <div class="alpha f-italiana">ABCDEFGHIJKLMNOPQRSTUVWXYZ åäö 1234567890</div>
+  </div>
+
+  <!-- Fraunces -->
+  <div class="card">
+    <div class="meta">
+      <span class="name">Fraunces <span class="closeness c-stylish">Närmast Stylish Mother</span></span>
+      <span class="desc">Modern, organisk.<br>Lekfulla svansar i italics.</span>
+    </div>
+    <div class="display f-fraunces" style="font-weight:500;">MLC Workspace</div>
+    <div class="display-small f-fraunces" style="font-style: italic; font-weight:400;">Stylish Mother</div>
+    <div class="alpha f-fraunces">ABCDEFGHIJKLMNOPQRSTUVWXYZ åäö 1234567890</div>
+  </div>
+
+  <!-- Bodoni Moda -->
+  <div class="card">
+    <div class="meta">
+      <span class="name">Bodoni Moda</span>
+      <span class="desc">High-fashion klassiker.<br>Vogue/Harper's-känsla.</span>
+    </div>
+    <div class="display f-bodoni" style="font-weight:600;">MLC Workspace</div>
+    <div class="display-small f-bodoni" style="font-style: italic; font-weight:500;">Stylish Mother</div>
+    <div class="alpha f-bodoni">ABCDEFGHIJKLMNOPQRSTUVWXYZ åäö 1234567890</div>
+  </div>
+
+  <h2 class="section-title">Sans-serif (för brödtext och UI)</h2>
+
+  <p class="lead">
+    Display-serifer fungerar bara i rubriker, knappar och stora citat. För all annan text (menyer, beskrivningar, formulärfält) behövs en sans-serif. Två moderna förslag som passar bra med någon av seriferna ovan:
+  </p>
+
+  <!-- Inter -->
+  <div class="card">
+    <div class="meta">
+      <span class="name">Inter</span>
+      <span class="desc">De facto-standard på moderna webbappar.<br>Skarp, neutral, läsbar i små storlekar.</span>
+    </div>
+    <div class="display-small f-inter" style="font-weight:600;">MLC Workspace</div>
+    <div class="body-text f-inter" style="margin-top:12px;">
+      Marzena Langsdale Communication och Yobedoo arbetar med strategi, varumärke och kommunikation för företag i Health, Travel och HoReCa. Vi bygger värde, inte timmar.
+    </div>
+    <div class="alpha f-inter" style="font-size:18px; letter-spacing:1px;">ABCDEFGHIJKLMNOPQRSTUVWXYZ åäö</div>
+  </div>
+
+  <!-- DM Sans -->
+  <div class="card">
+    <div class="meta">
+      <span class="name">DM Sans</span>
+      <span class="desc">Mjukare, lite mer karaktär.<br>Pairar perfekt med DM Serif Display.</span>
+    </div>
+    <div class="display-small f-dmsans" style="font-weight:600;">MLC Workspace</div>
+    <div class="body-text f-dmsans" style="margin-top:12px;">
+      Marzena Langsdale Communication och Yobedoo arbetar med strategi, varumärke och kommunikation för företag i Health, Travel och HoReCa. Vi bygger värde, inte timmar.
+    </div>
+    <div class="alpha f-dmsans" style="font-size:18px; letter-spacing:1px;">ABCDEFGHIJKLMNOPQRSTUVWXYZ åäö</div>
+  </div>
+
+  <h2 class="section-title">Förslag på pairing</h2>
+
+  <div class="card">
+    <div class="meta">
+      <span class="name">Min rekommendation för MLC Workspace</span>
+      <span class="desc">Elegant + läsbar.</span>
+    </div>
+    <div class="display f-playfair" style="font-weight:600;">MLC Workspace</div>
+    <div class="body-text f-inter" style="margin-top:8px; font-size:16px;">
+      Playfair Display för rubriker (H1, H2 och stora siffror i kort). Inter för all annan text (brödtext, knappar, menyer, formulärfält). Det är pairingen som <em>The New York Times</em>, många modemagasin och tusentals premium-webbplatser använder.
+    </div>
+    <div class="pair-note">
+      <strong>Playfair Display + Inter</strong> — säker, snygg, gratis, fungerar på alla dashboards. Vill du ha något mer dramatiskt: byt rubrik mot <strong>Italiana</strong> eller <strong>Cormorant Garamond</strong>.
+    </div>
+  </div>
+
+  <footer>
+    MLC Nest AB — Nordens mest empatiska och skalbara byrå
+  </footer>
+
+</div>
+</body>
+</html>
