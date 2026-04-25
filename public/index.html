@@ -45,6 +45,8 @@
     object-fit: cover;
     z-index: 0;
     will-change: transform;
+    transform: scale(1.5);
+    transform-origin: center center;
   }
 
   .page-wrapper {
@@ -417,13 +419,14 @@
 </footer>
 
 <script>
-// Parallax effect on background image
+// Parallax effect on background image — large scale + small movement so the image always covers the viewport
 const pageBg = document.getElementById('pageBg');
 if (pageBg) {
-  window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    pageBg.style.transform = `translateY(${scrollY * 0.3}px) scale(1.1)`;
-  }, { passive: true });
+  const applyParallax = () => {
+    pageBg.style.transform = `translateY(${window.scrollY * 0.05}px) scale(1.5)`;
+  };
+  window.addEventListener('scroll', applyParallax, { passive: true });
+  applyParallax();
 }
 </script>
 
