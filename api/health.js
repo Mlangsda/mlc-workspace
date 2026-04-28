@@ -21,7 +21,6 @@ const THIRD_PARTY = [
   { name: 'Vercel', url: 'https://www.vercel-status.com/api/v2/status.json' },
   { name: 'Supabase', url: 'https://status.supabase.com/api/v2/status.json' },
   { name: 'GitHub', url: 'https://www.githubstatus.com/api/v2/status.json' },
-  { name: 'OpenAI', url: 'https://status.openai.com/api/v2/status.json' },
 ];
 
 async function fetchWithTimeout(url, options = {}) {
