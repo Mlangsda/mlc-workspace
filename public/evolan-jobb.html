@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evolan Jobb · MLC</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+<style>
+  :root {
+    --bg: #faf6f0;
+    --card: #ffffff;
+    --card-hover: #fffcf5;
+    --border: #e8dcc8;
+    --text: #3d3425;
+    --text-secondary: #7a6d5a;
+    --accent: #c49a4a;
+    --accent-hover: #b38a3a;
+    --done: #5cb87a;
+    --danger: #d45050;
+    --input-bg: #fdf9f1;
+    --note-bg: #fbf3e3;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  header { margin-bottom: 28px; }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    transition: color 0.15s;
+  }
+  .back-link:hover { color: var(--accent); }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .logo {
+    width: 40px;
+    height: 40px;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+  }
+
+  header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  header p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    max-width: 720px;
+  }
+
+  .stats {
+    display: flex;
+    gap: 18px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .stats strong { color: var(--text); font-weight: 700; }
+
+  .loader, .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-secondary);
+  }
+
+  .sections {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 22px 16px;
+    box-shadow: 0 2px 8px rgba(61,52,37,0.05);
+    transition: border-color 0.15s;
+  }
+  .section:hover { border-color: #d9c8a4; }
+
+  .section.is-note { background: var(--note-bg); }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+
+  .section-counter {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    background: var(--input-bg);
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .items {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 10px;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    transition: background 0.12s, border-color 0.12s;
+  }
+  .item:hover { background: var(--card-hover); }
+
+  .item.is-note { background: transparent; border-color: transparent; padding-left: 4px; padding-right: 4px; }
+  .item.is-note:hover { background: rgba(255,255,255,0.5); }
+
+  .item input[type="checkbox"] {
+    margin-top: 3px;
+    width: 17px;
+    height: 17px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .item-body {
+    flex: 1;
+    line-height: 1.5;
+    word-break: break-word;
+    cursor: text;
+    padding: 1px 2px;
+    border-radius: 4px;
+  }
+  .item-body:hover { background: rgba(196,154,74,0.08); }
+  .item-body:focus { outline: 2px solid var(--accent); background: white; }
+
+  .item.done .item-body {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+  }
+
+  .edit-hint {
+    font-size: 11px;
+    color: var(--text-secondary);
+    opacity: 0.55;
+    flex-shrink: 0;
+    margin-top: 2px;
+    padding: 0 2px;
+    user-select: none;
+  }
+
+  .delete-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 0 6px;
+    opacity: 0.55;
+    transition: opacity 0.15s, color 0.15s;
+    flex-shrink: 0;
+  }
+  .item:hover .delete-btn { opacity: 1; }
+  .delete-btn:hover { color: var(--danger); }
+
+  .add-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+
+  .add-row input {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--input-bg);
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .add-row input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--card);
+  }
+  .add-row button {
+    padding: 10px 18px;
+    background: var(--accent);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .add-row button:hover { background: var(--accent-hover); }
+  .add-row button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  footer {
+    text-align: center;
+    padding: 40px 20px 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+  }
+
+  @media (max-width: 700px) {
+    .container { padding: 24px 14px 60px; }
+    header h1 { font-size: 24px; }
+    .section { padding: 16px 14px 14px; }
+    .section-title { font-size: 16px; }
+    .add-row input { min-width: 140px; }
+    .edit-hint { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <a class="back-link" href="/">← Tillbaka till Workspace</a>
+    <div class="header-top">
+      <img class="logo" src="/mlc-logo.png" alt="MLC">
+      <h1>Evolan Jobb</h1>
+    </div>
+    <p>Anteckningar och to-dos från Teams-möte med Cecilia Hallorschen 2026-04-28. Klicka på en rad för att redigera, bocka av med checkboxen, ta bort med ×. Allt sparas direkt i Supabase.</p>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div id="content" class="loader">Laddar…</div>
+
+  <footer>MLC Nest AB — Nordens mest empatiska och skalbara byrå</footer>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.46.1';
+
+const SUPABASE_URL = 'https://dxixbtxywsvshthtiwgo.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4aXhidHh5d3N2c2h0aHRpd2dvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2NjE1MzgsImV4cCI6MjA4ODIzNzUzOH0.87q-gad0BtcRcYHKpsKNqoJ8wTo-8jLPUizGomLboB4';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+const SECTIONS = [
+  { name: 'Mötesinfo', kind: 'note' },
+  { name: 'Sammanfattning', kind: 'note' },
+  { name: "Children's Handout — Global (2-sidig)", kind: 'todo' },
+  { name: "Children's Handout — Finland (finsk version)", kind: 'todo' },
+  { name: 'Visco Paste — Global Brochure (4-sidig A4)', kind: 'todo' },
+  { name: 'Visco Paste — Arabvärlden', kind: 'todo' },
+  { name: 'Mässväggar', kind: 'todo' },
+  { name: 'Foten — kort (apoteksmässa)', kind: 'todo' },
+  { name: 'Budget & Prio', kind: 'todo' },
+];
+
+const contentEl = document.getElementById('content');
+const statsEl = document.getElementById('stats');
+
+async function loadAll() {
+  const { data, error } = await supabase
+    .from('evolan_jobb_items')
+    .select('*')
+    .order('section')
+    .order('sort_order');
+  if (error) {
+    contentEl.innerHTML = `<div class="empty">Kunde inte ladda: ${escapeHtml(error.message)}</div>`;
+    return;
+  }
+  render(data || []);
+}
+
+function render(items) {
+  const grouped = {};
+  for (const s of SECTIONS) grouped[s.name] = [];
+  for (const it of items) {
+    if (!grouped[it.section]) grouped[it.section] = [];
+    grouped[it.section].push(it);
+  }
+
+  const totalTodos = items.filter(i => i.kind === 'todo').length;
+  const doneTodos = items.filter(i => i.kind === 'todo' && i.is_done).length;
+  statsEl.innerHTML = `
+    <span><strong>${doneTodos}</strong> / ${totalTodos} klara</span>
+    <span><strong>${SECTIONS.length}</strong> sektioner</span>
+    <span><strong>${items.length}</strong> rader totalt</span>
+  `;
+
+  contentEl.className = 'sections';
+  contentEl.innerHTML = SECTIONS.map(sec => sectionCard(sec, grouped[sec.name] || [])).join('');
+  attachHandlers();
+}
+
+function sectionCard(section, items) {
+  const isNote = section.kind === 'note';
+  const todos = items.filter(i => i.kind === 'todo');
+  const done = todos.filter(i => i.is_done).length;
+  const counter = isNote
+    ? `${items.length} rad${items.length === 1 ? '' : 'er'}`
+    : `${done} / ${todos.length} klara`;
+
+  const itemsHtml = items.length
+    ? items.map(itemRow).join('')
+    : '<div style="color:var(--text-secondary);font-size:13px;padding:6px 4px;">Inga rader än. Lägg till nedan.</div>';
+
+  return `
+    <section class="section ${isNote ? 'is-note' : ''}" data-section="${escapeAttr(section.name)}">
+      <div class="section-header">
+        <h2 class="section-title">${escapeHtml(section.name)}</h2>
+        <span class="section-counter">${counter}</span>
+      </div>
+      <div class="items">${itemsHtml}</div>
+      <div class="add-row">
+        <input type="text" placeholder="${isNote ? 'Lägg till en notering…' : 'Lägg till en uppgift…'}" data-action="input" data-section="${escapeAttr(section.name)}" data-kind="${section.kind}">
+        <button data-action="add" data-section="${escapeAttr(section.name)}" data-kind="${section.kind}">Lägg till</button>
+      </div>
+    </section>`;
+}
+
+function itemRow(it) {
+  const isNote = it.kind === 'note';
+  const checkbox = isNote
+    ? ''
+    : `<input type="checkbox" data-action="toggle" data-id="${it.id}" ${it.is_done ? 'checked' : ''}>`;
+  return `
+    <div class="item ${isNote ? 'is-note' : ''} ${it.is_done ? 'done' : ''}" data-id="${it.id}">
+      ${checkbox}
+      <div class="item-body" contenteditable="true" data-action="edit" data-id="${it.id}">${escapeHtml(it.body)}</div>
+      <span class="edit-hint" title="Klicka för att redigera">✎</span>
+      <button class="delete-btn" data-action="delete" data-id="${it.id}" title="Ta bort">×</button>
+    </div>`;
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+}
+function escapeAttr(s) { return escapeHtml(s); }
+
+function attachHandlers() {
+  contentEl.querySelectorAll('[data-action="toggle"]').forEach(el => {
+    el.addEventListener('change', async e => {
+      const id = e.target.dataset.id;
+      const is_done = e.target.checked;
+      e.target.closest('.item').classList.toggle('done', is_done);
+      const { error } = await supabase.from('evolan_jobb_items')
+        .update({ is_done, updated_at: new Date().toISOString() })
+        .eq('id', id);
+      if (error) { alert('Kunde inte spara: ' + error.message); return; }
+      loadAll();
+    });
+  });
+
+  contentEl.querySelectorAll('[data-action="delete"]').forEach(el => {
+    el.addEventListener('click', async e => {
+      if (!confirm('Ta bort den här raden?')) return;
+      const { error } = await supabase.from('evolan_jobb_items').delete().eq('id', e.target.dataset.id);
+      if (error) return alert('Kunde inte ta bort: ' + error.message);
+      loadAll();
+    });
+  });
+
+  contentEl.querySelectorAll('[data-action="edit"]').forEach(el => {
+    let original = el.textContent;
+    el.addEventListener('focus', () => { original = el.textContent; });
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+      if (e.key === 'Escape') { el.textContent = original; el.blur(); }
+    });
+    el.addEventListener('blur', async () => {
+      const newBody = el.textContent.trim();
+      if (newBody === original.trim()) return;
+      if (!newBody) {
+        el.textContent = original;
+        alert('Texten kan inte vara tom. Använd × för att ta bort.');
+        return;
+      }
+      const { error } = await supabase.from('evolan_jobb_items')
+        .update({ body: newBody, updated_at: new Date().toISOString() })
+        .eq('id', el.dataset.id);
+      if (error) {
+        alert('Kunde inte spara: ' + error.message);
+        el.textContent = original;
+      } else {
+        original = newBody;
+      }
+    });
+  });
+
+  contentEl.querySelectorAll('[data-action="input"]').forEach(el => {
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const sec = e.target.dataset.section;
+        const btn = contentEl.querySelector(`[data-action="add"][data-section="${cssEscape(sec)}"]`);
+        btn && btn.click();
+      }
+    });
+  });
+
+  contentEl.querySelectorAll('[data-action="add"]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const section = btn.dataset.section;
+      const kind = btn.dataset.kind;
+      const input = contentEl.querySelector(`[data-action="input"][data-section="${cssEscape(section)}"]`);
+      const body = input.value.trim();
+      if (!body) return;
+      btn.disabled = true;
+
+      const { data: max } = await supabase.from('evolan_jobb_items')
+        .select('sort_order').eq('section', section)
+        .order('sort_order', { ascending: false }).limit(1);
+      const next = (max && max[0] ? max[0].sort_order : 0) + 1;
+
+      const { error } = await supabase.from('evolan_jobb_items').insert([{
+        section, body, kind, sort_order: next
+      }]);
+      btn.disabled = false;
+      if (error) return alert('Kunde inte spara: ' + error.message);
+      input.value = '';
+      loadAll();
+    });
+  });
+}
+
+function cssEscape(s) {
+  if (window.CSS && CSS.escape) return CSS.escape(s);
+  return String(s).replace(/(["\\])/g, '\\$1');
+}
+
+loadAll();
+</script>
+</body>
+</html>
