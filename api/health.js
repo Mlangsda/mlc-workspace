@@ -97,7 +97,7 @@ async function checkMsGraph() {
 
 async function checkSecurity() {
   const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-  const key = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
   if (!url || !key) return null;
   try {
     const res = await fetchWithTimeout(`${url}/rest/v1/security_findings?select=created_at,findings,action_required&order=created_at.desc&limit=1`, {
