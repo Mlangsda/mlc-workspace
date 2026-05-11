@@ -38,14 +38,16 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'PUT') {
-      const { id, notes, status } = req.body || {};
+      const { id, notes, status, description, name } = req.body || {};
       if (!id) return res.status(400).json({ error: 'id krävs' });
 
       const update = {};
       if (typeof notes === 'string') update.notes = notes;
       if (typeof status === 'string') update.status = status;
+      if (typeof description === 'string') update.description = description;
+      if (typeof name === 'string') update.name = name;
       if (Object.keys(update).length === 0) {
-        return res.status(400).json({ error: 'inget att uppdatera (notes eller status krävs)' });
+        return res.status(400).json({ error: 'inget att uppdatera (notes, status, description eller name krävs)' });
       }
 
       const url = `${SUPABASE_URL}/rest/v1/skills?id=eq.${id}`;
