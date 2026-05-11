@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skills Catalog · MLC</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+<style>
+  :root {
+    --bg: #faf6f0;
+    --card: #ffffff;
+    --card-hover: #fffcf5;
+    --border: #e8dcc8;
+    --text: #3d3425;
+    --text-secondary: #7a6d5a;
+    --accent: #c49a4a;
+    --accent-hover: #b38a3a;
+    --status-aktiv: #5cb87a;
+    --status-utveckling: #c49a4a;
+    --status-ide: #b8a27a;
+    --status-pausad: #b8a27a;
+    --input-bg: #fdf9f1;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    transition: color 0.15s;
+  }
+  .back-link:hover { color: var(--accent); }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .logo {
+    width: 40px;
+    height: 40px;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+  }
+  header h1 {
+    font-family: 'Italiana', serif;
+    font-size: 48px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+  header p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    max-width: 680px;
+    margin-bottom: 32px;
+  }
+
+  .section { margin-bottom: 48px; }
+  .section-title {
+    font-family: 'Italiana', serif;
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 16px;
+    color: var(--text);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .section-count {
+    font-family: 'SF Pro Display', sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .skill-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .skill-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 12px rgba(196, 154, 74, 0.08);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--input-bg);
+  }
+  .card-icon-placeholder {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--input-bg);
+    border: 1px dashed var(--border);
+    flex-shrink: 0;
+  }
+  .card-name {
+    font-family: 'Italiana', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text);
+    flex-grow: 1;
+  }
+
+  .card-description {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+  }
+
+  .status-select {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--input-bg);
+    color: var(--text);
+    cursor: pointer;
+    text-transform: lowercase;
+    width: max-content;
+  }
+  .status-select.aktiv { background: rgba(92, 184, 122, 0.12); color: var(--status-aktiv); border-color: rgba(92, 184, 122, 0.3); }
+  .status-select.under-utveckling { background: rgba(196, 154, 74, 0.15); color: var(--status-utveckling); border-color: rgba(196, 154, 74, 0.3); }
+  .status-select.idé { background: rgba(184, 162, 122, 0.12); color: var(--status-ide); border-color: rgba(184, 162, 122, 0.3); }
+  .status-select.pausad { background: rgba(184, 162, 122, 0.08); color: var(--status-pausad); border-color: rgba(184, 162, 122, 0.2); opacity: 0.7; }
+
+  .notes-wrap {
+    position: relative;
+  }
+  .notes-label {
+    display: block;
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    opacity: 0.7;
+  }
+  .notes-textarea {
+    width: 100%;
+    min-height: 60px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text);
+    background: var(--input-bg);
+    resize: vertical;
+    opacity: 0.85;
+    transition: opacity 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .notes-textarea:focus {
+    outline: none;
+    opacity: 1;
+    border-color: var(--accent);
+    background: var(--card);
+  }
+  .notes-textarea::placeholder { color: var(--text-secondary); opacity: 0.6; }
+
+  .save-btn {
+    align-self: flex-end;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.15s, transform 0.15s, background 0.15s;
+    pointer-events: none;
+  }
+  .save-btn.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .save-btn:hover { background: var(--accent-hover); }
+  .save-btn.saved {
+    background: var(--status-aktiv);
+    pointer-events: none;
+  }
+
+  .file-path {
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 11px;
+    color: var(--text-secondary);
+    opacity: 0.65;
+    word-break: break-all;
+  }
+
+  .add-row {
+    margin-top: 32px;
+    padding: 24px;
+    background: var(--card);
+    border: 1px dashed var(--border);
+    border-radius: 16px;
+  }
+  .add-row h3 {
+    font-family: 'Italiana', serif;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 14px;
+  }
+  .add-row-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .add-row input, .add-row select, .add-row textarea {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    background: var(--input-bg);
+    color: var(--text);
+    width: 100%;
+  }
+  .add-row textarea { grid-column: 1 / -1; min-height: 60px; }
+  .add-row button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  .add-row button:hover { background: var(--accent-hover); }
+
+  .loader, .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-secondary);
+  }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 12px;
+  }
+
+  @media (max-width: 700px) {
+    header h1 { font-size: 36px; }
+    .section-title { font-size: 22px; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .add-row-fields { grid-template-columns: 1fr; }
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+  <a class="back-link" href="/">&larr; Tillbaka till workspace</a>
+
+  <header>
+    <div class="header-top">
+      <img class="logo" src="/mlc-logo.png" alt="MLC">
+      <h1>Skills Catalog</h1>
+    </div>
+    <p>Översikt över alla MLC AI-skills och agenter. Anteckna pågående optimeringar, ändra status, lägg till nya.</p>
+  </header>
+
+  <div id="content" class="loader">Laddar...</div>
+
+  <div class="add-row">
+    <h3>Lägg till ny skill</h3>
+    <div class="add-row-fields">
+      <input id="new-name" type="text" placeholder="Namn (t.ex. 'PR-chef')">
+      <select id="new-category">
+        <option value="ai-agent">AI-agent</option>
+        <option value="workflow-skill">Workflow-skill</option>
+        <option value="system-skill">System-skill</option>
+      </select>
+      <textarea id="new-description" placeholder="Kort beskrivning..."></textarea>
+    </div>
+    <button id="add-btn">Lägg till</button>
+  </div>
+
+  <footer>MLC Nest AB — Nordens mest empatiska och skalbara byrå</footer>
+</div>
+
+<script>
+const CATEGORY_LABELS = {
+  'ai-agent': 'AI-agenter',
+  'workflow-skill': 'Workflow-skills',
+  'system-skill': 'System-skills',
+};
+const CATEGORY_ORDER = ['ai-agent', 'workflow-skill', 'system-skill'];
+const STATUSES = ['aktiv', 'under-utveckling', 'idé', 'pausad'];
+
+let skillsData = [];
+const originalNotes = new Map();
+
+async function loadSkills() {
+  const content = document.getElementById('content');
+  try {
+    const r = await fetch('/api/skills');
+    if (!r.ok) throw new Error('Kunde inte ladda skills');
+    skillsData = await r.json();
+    renderSkills();
+  } catch (err) {
+    content.innerHTML = '<div class="empty">Kunde inte ladda skills: ' + err.message + '</div>';
+  }
+}
+
+function renderSkills() {
+  const content = document.getElementById('content');
+  content.classList.remove('loader');
+  const grouped = {};
+  CATEGORY_ORDER.forEach(c => grouped[c] = []);
+  skillsData.forEach(s => {
+    if (grouped[s.category]) grouped[s.category].push(s);
+  });
+
+  content.innerHTML = CATEGORY_ORDER.map(cat => {
+    const items = grouped[cat];
+    if (!items.length) return '';
+    return `
+      <section class="section">
+        <h2 class="section-title">${CATEGORY_LABELS[cat]} <span class="section-count">${items.length} st</span></h2>
+        <div class="cards-grid">
+          ${items.map(renderCard).join('')}
+        </div>
+      </section>
+    `;
+  }).join('');
+
+  attachListeners();
+}
+
+function renderCard(s) {
+  originalNotes.set(s.id, s.notes || '');
+  const iconHtml = s.icon_path
+    ? `<img class="card-icon" src="${escapeHtml(s.icon_path)}" alt="" onerror="this.outerHTML='<div class=\\'card-icon-placeholder\\'></div>'">`
+    : '<div class="card-icon-placeholder"></div>';
+  return `
+    <div class="skill-card" data-id="${s.id}">
+      <div class="card-header">
+        ${iconHtml}
+        <div class="card-name">${escapeHtml(s.name)}</div>
+      </div>
+      <div class="card-description">${escapeHtml(s.description || '')}</div>
+      <select class="status-select ${s.status}" data-id="${s.id}">
+        ${STATUSES.map(st => `<option value="${st}"${st===s.status?' selected':''}>${st}</option>`).join('')}
+      </select>
+      <div class="notes-wrap">
+        <label class="notes-label">Anteckningar</label>
+        <textarea class="notes-textarea" data-id="${s.id}" placeholder="Skriv anteckningar...">${escapeHtml(s.notes || '')}</textarea>
+        <button class="save-btn" data-id="${s.id}">Spara</button>
+      </div>
+      ${s.file_path ? `<div class="file-path">${escapeHtml(s.file_path)}</div>` : ''}
+    </div>
+  `;
+}
+
+function attachListeners() {
+  document.querySelectorAll('.notes-textarea').forEach(ta => {
+    ta.addEventListener('input', () => {
+      const id = ta.dataset.id;
+      const btn = document.querySelector(`.save-btn[data-id="${id}"]`);
+      const orig = originalNotes.get(id) || '';
+      if (ta.value !== orig) btn.classList.add('visible');
+      else btn.classList.remove('visible');
+      btn.classList.remove('saved');
+      btn.textContent = 'Spara';
+    });
+  });
+
+  document.querySelectorAll('.save-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.id;
+      const ta = document.querySelector(`.notes-textarea[data-id="${id}"]`);
+      try {
+        const r = await fetch('/api/skills', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, notes: ta.value }),
+        });
+        if (!r.ok) throw new Error(await r.text());
+        originalNotes.set(id, ta.value);
+        btn.textContent = 'Sparat';
+        btn.classList.add('saved');
+        setTimeout(() => {
+          btn.classList.remove('visible', 'saved');
+          btn.textContent = 'Spara';
+        }, 1500);
+      } catch (err) {
+        alert('Fel vid sparande: ' + err.message);
+      }
+    });
+  });
+
+  document.querySelectorAll('.status-select').forEach(sel => {
+    sel.addEventListener('change', async () => {
+      const id = sel.dataset.id;
+      const newStatus = sel.value;
+      sel.className = 'status-select ' + newStatus;
+      try {
+        const r = await fetch('/api/skills', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, status: newStatus }),
+        });
+        if (!r.ok) throw new Error(await r.text());
+      } catch (err) {
+        alert('Fel vid statusändring: ' + err.message);
+      }
+    });
+  });
+}
+
+document.getElementById('add-btn').addEventListener('click', async () => {
+  const name = document.getElementById('new-name').value.trim();
+  const category = document.getElementById('new-category').value;
+  const description = document.getElementById('new-description').value.trim();
+  if (!name) {
+    alert('Namn krävs');
+    return;
+  }
+  try {
+    const r = await fetch('/api/skills', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, category, description }),
+    });
+    if (!r.ok) throw new Error(await r.text());
+    document.getElementById('new-name').value = '';
+    document.getElementById('new-description').value = '';
+    await loadSkills();
+  } catch (err) {
+    alert('Fel: ' + err.message);
+  }
+});
+
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+loadSkills();
+</script>
+</body>
+</html>
