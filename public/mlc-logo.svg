@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="279.96 196.77 837.69 837.69">
+  <defs>
+    <style>
+      .cls-1,.cls-2,.cls-3{fill:#1d1d1b;}
+      .cls-4{fill:none;stroke:#1d1d1b;stroke-miterlimit:10;stroke-width:56.69px;}
+      .cls-2{letter-spacing:.3em;}
+      .cls-2,.cls-3{font-family:Gotham-Bold, Gotham, 'Helvetica Neue', Arial, sans-serif;font-size:345.19px;font-weight:700;}
+      .cls-3{letter-spacing:.3em;}
+    </style>
+  </defs>
+  <rect class="cls-4" x="279.96" y="196.77" width="837.69" height="837.69"/>
+  <text class="cls-3" transform="translate(477.79 529.84)"><tspan x="0" y="0">M</tspan></text>
+  <text class="cls-2" transform="translate(819.22 529.84)"><tspan x="0" y="0">L</tspan></text>
+  <text class="cls-2" transform="translate(789.54 846.07)"><tspan x="0" y="0">C</tspan></text>
+  <circle class="cls-1" cx="728.4" cy="819.12" r="29.84"/>
+</svg>

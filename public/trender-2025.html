@@ -67,9 +67,12 @@
     border: 1px solid var(--border);
   }
   .header-logo {
-    width: 56px;
-    height: 56px;
-    margin-bottom: 16px;
+    width: 64px;
+    height: 64px;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 16px;
   }
   header .label {
     font-size: 12px;
@@ -258,7 +261,7 @@
   <a class="back-link" href="/">← Tillbaka till MLC Workspace</a>
 
   <header>
-    <img class="header-logo" src="/mlc-logo.png" alt="MLC">
+    <img class="header-logo" src="/mlc-logo.svg" alt="MLC">
     <div class="label">Trendrapport</div>
     <h1>Trender 2025</h1>
     <p class="tagline">15 megatrender som formar samhället, ekonomin och värderingarna det närmaste decenniet</p>
