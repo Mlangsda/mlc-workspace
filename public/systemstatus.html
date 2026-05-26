@@ -199,7 +199,10 @@
   <div class="section-title">3:e parts status</div>
   <div class="status-list" id="thirdparty"><div class="loading">Laddar…</div></div>
 
-  <div class="section-title">Om datorn försvinner — så återställer du allt</div>
+  <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+    <span>Om datorn försvinner — så återställer du allt</span>
+    <span id="lastBackup" style="font-size:11px;font-weight:600;text-transform:none;letter-spacing:0;color:var(--text-secondary);">Hämtar senaste backup-tid…</span>
+  </div>
   <div class="status-list" style="padding: 20px 24px; line-height: 1.6; font-size: 14px;">
     <ol style="margin: 0 0 16px; padding-left: 22px;">
       <li style="margin-bottom: 10px;">Installera Dropbox-appen (ladda ner från dropbox.com på den nya datorn). Logga in. Vänta tills MLC Claude Backup har synkat klart.</li>
@@ -382,6 +385,30 @@ async function loadStatus() {
 }
 
 loadStatus();
+
+async function loadLastBackup() {
+  const el = document.getElementById('lastBackup');
+  if (!el) return;
+  try {
+    const res = await fetch('/last-backup.json?t=' + Date.now());
+    if (!res.ok) throw new Error('hittades inte');
+    const data = await res.json();
+    const ts = new Date(data.timestamp);
+    const diffHours = (Date.now() - ts.getTime()) / 1000 / 3600;
+    const formatted = ts.toLocaleString('sv-SE', { dateStyle: 'short', timeStyle: 'short' });
+    let ageText;
+    if (diffHours < 1) ageText = 'för mindre än en timme sedan';
+    else if (diffHours < 24) ageText = 'för ' + Math.round(diffHours) + ' tim sedan';
+    else ageText = 'för ' + Math.round(diffHours / 24) + ' dagar sedan';
+    const stale = diffHours > 48;
+    const color = stale ? 'var(--red)' : (diffHours > 30 ? 'var(--yellow)' : 'var(--green)');
+    const icon = stale ? '⚠️ ' : '';
+    el.innerHTML = icon + 'Senast backat: <span style="color:' + color + ';font-weight:700;">' + formatted + '</span> (' + ageText + ')';
+  } catch (err) {
+    el.textContent = 'Senaste backup-tid okänd (väntar på första körning)';
+  }
+}
+loadLastBackup();
 setInterval(loadStatus, 60000);
 </script>
 
